@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vibrato Trainer">
+<meta name="theme-color" content="#e8b84b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<!-- SEO: Core -->
+<title>Vibrato Rhythm Trainer — Tempo-Synced Vibrato Metronome for Musicians and Singers</title>
+<meta name="description" content="Train your vibrato with precision. A free, tempo-synced vibrato metronome that maps the correct rhythmic subdivision for vibrato at any BPM — from slow ballads to fast bebop. For singers, string players, wind players, and jazz musicians.">
+<meta name="keywords" content="vibrato trainer, vibrato metronome, vibrato practice tool, how to practice vibrato, vibrato speed, vibrato rhythm, vibrato subdivisions, musician metronome, jazz vibrato, string vibrato, vocal vibrato, wind instrument vibrato, vibrato BPM, vibrato tempo">
+<meta name="author" content="Michael Van Bebber">
+<link rel="canonical" href="https://vibratotrainer.com/">
+
+<!-- SEO: Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vibratotrainer.com/">
+<meta property="og:title" content="Vibrato Rhythm Trainer — Tempo-Synced Vibrato Metronome for Musicians and Singers">
+<meta property="og:description" content="Train your vibrato with precision. Tempo-synced rhythmic subdivisions for vibrato at any BPM — for singers, string players, wind players, and jazz musicians.">
+<meta property="og:image" content="https://vibratotrainer.com/og-image.png?v=7">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Vibrato Trainer">
+<meta property="og:locale" content="en_US">
+
+<!-- SEO: Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vibrato Rhythm Trainer — Tempo-Synced Vibrato Metronome for Musicians and Singers">
+<meta name="twitter:description" content="Train your vibrato with precision. Tempo-synced rhythmic subdivisions for vibrato at any BPM — for singers, string players, wind players, and jazz musicians.">
+<meta name="twitter:image" content="https://vibratotrainer.com/og-image.png?v=7">
+
+<!-- SEO: Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Vibrato Rhythm Trainer — Tempo-Synced Vibrato Metronome for Musicians and Singers",
+  "url": "https://vibratotrainer.com/",
+  "description": "A free, tempo-synced vibrato metronome and training tool for musicians. Maps the correct rhythmic subdivision for vibrato at any tempo from 50 to 400 BPM — covering slow ballads through fast bebop. For singers, string players, wind players, and jazz musicians.",
+  "applicationCategory": "MusicApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Michael Van Bebber"
+  },
+  "featureList": [
+    "Tempo-synced vibrato metronome",
+    "Automatic vibrato subdivision mapping across 6 tempo zones",
+    "Tap tempo",
+    "Adjustable time signatures",
+    "Beat click and vibrato click audio",
+    "Piano keyboard for pitch reference",
+    "Multiple waveform tones",
+    "Visual dot animation synced to vibrato rhythm",
+    "Works offline as a Progressive Web App"
+  ],
+  "screenshot": "https://vibratotrainer.com/og-image.png?v=7"
+}
+</script>
+<style>
+/* ── FONTS ── */
+
+:root {
+  --font-main: 'Optima', 'Candara', 'Segoe UI', 'Calibri', sans-serif;
+  --font-display: 'Optima', 'Candara', 'Segoe UI', 'Calibri', sans-serif;
+
+  --bg: #0e0c0a;
+  --surface: #181410;
+  --border: #2e2820;
+  --accent: #e8b84b;
+  --accent2: #c97b4b;
+  --accent3: #6ec6c0;
+  --text: #f0ead8;
+  --muted: #7a6e5e;
+  --pulse-song: #e8b84b;
+  --pulse-vib: #6ec6c0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem env(safe-area-inset-bottom, 2rem);
+  padding-bottom: max(4rem, env(safe-area-inset-bottom, 4rem));
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(232,184,75,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(110,198,192,0.05) 0%, transparent 50%);
+}
+
+header { text-align: center; margin-bottom: 2rem; }
+header h1 {
+  font-family: var(--font-display);
+  
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+header p {
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.w { width: 100%; max-width: 540px; }
+
+/* ── RHYTHM HERO ── */
+.rhythm-hero {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.4rem 1.6rem 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.rh-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.4rem;
+  gap: 0.8rem;
+}
+
+.rh-subdivision {
+  font-family: var(--font-display);
+  
+  font-size: clamp(1.3rem, 4vw, 1.9rem);
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.rh-zone-badge {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1px;
+  white-space: nowrap;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Time signature buttons */
+.timesig-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.timesig-btn {
+  font-weight: 700;
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  padding: 0.45rem 0;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.12s;
+  text-align: center;
+}
+.timesig-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+.timesig-btn.active {
+  border-color: var(--accent3);
+  color: var(--accent3);
+  background: rgba(110,198,192,0.1);
+  box-shadow: 0 0 8px rgba(110,198,192,0.15);
+}
+
+/* Division dots */
+.division-area {
+  margin-bottom: 0.6rem;
+  position: relative;
+  padding-bottom: 1.4rem;
+}
+
+.division-row {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+}
+
+.beat-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.beat-underline {
+  position: absolute;
+  bottom: -10px;
+  left: 0; right: 0;
+  height: 2px;
+  background: rgba(232,184,75,0.15);
+  border-radius: 1px;
+  transition: background 0.1s;
+}
+
+.dot-slot {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.div-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(110,198,192,0.15);
+  border: 1.5px solid rgba(110,198,192,0.3);
+  transition: all 0.06s;
+  flex-shrink: 0;
+}
+.div-dot.beat-one {
+  background: rgba(232,184,75,0.15);
+  border-color: rgba(232,184,75,0.35);
+}
+.div-dot.lit {
+  background: var(--accent3);
+  border-color: var(--accent3);
+  box-shadow: 0 0 10px rgba(110,198,192,0.8);
+}
+.div-dot.beat-one.lit {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(232,184,75,0.9);
+}
+
+.beat-sep {
+  width: 1px;
+  height: 30px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin: 0 3px;
+}
+
+.beat-numbers {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+}
+
+.beat-num-grp {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* Stats */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.stat-cell {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.7rem;
+  border-radius: 1px;
+  text-align: center;
+}
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--accent3);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.stat-lbl {
+  font-size: 0.52rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── TEMPO CARD ── */
+.tempo-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.2rem 1.6rem 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.tempo-top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.tempo-big {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--accent);
+  line-height: 1;
+  min-width: 3.5ch;
+}
+
+.tempo-unit {
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.tap-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 1.6rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.1s;
+  align-self: center;
+}
+.tap-btn:hover { border-color: var(--accent); background: rgba(232,184,75,0.1); }
+.tap-btn:active { background: rgba(232,184,75,0.2); }
+
+.zone-strip-wrap { margin-bottom: 0.4rem; }
+
+.notation-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 0.3rem;
+  align-items: flex-end;
+  height: 44px;
+}
+
+.notation-zone {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+
+.notation-zone svg {
+  height: 38px;
+  width: auto;
+  fill: var(--text);
+  opacity: 0.7;
+}
+
+.notation-zone .note-label {
+  font-family: var(--font-main);
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+.zone-strip {
+  position: relative;
+  height: 14px;
+  border-radius: 3px;
+  overflow: visible;
+  background: linear-gradient(to right,
+    #8b5cf6 0%,    #8b5cf6 7.14%,
+    #3b82f6 7.14%, #3b82f6 14.29%,
+    #10b981 14.29%,#10b981 28.57%,
+    #e8b84b 28.57%,#e8b84b 42.86%,
+    #c97b4b 42.86%,#c97b4b 71.43%,
+    #ef4444 71.43%,#ef4444 100%
+  );
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.zone-cursor {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 26px;
+  background: white;
+  border-radius: 3px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 3px rgba(255,255,255,0.4);
+  transition: left 0.08s;
+  pointer-events: none;
+}
+
+.zone-labels { display: flex; margin-top: 0.3rem; margin-bottom: 0.3rem; }
+.zone-lbl { text-align: left; font-size: 0.75rem; padding-left: 2px; }
+
+/* Slider labels removed — zone strip is now the interactive slider */
+
+/* Volume sliders in mix card */
+.vol-group input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.vol-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 8px rgba(232,184,75,0.4);
+}
+.vol-group input[type="range"].vib-range::-webkit-slider-thumb {
+  background: var(--accent3);
+  box-shadow: 0 0 8px rgba(110,198,192,0.4);
+}
+.vol-group input[type="range"].pitch-range::-webkit-slider-thumb {
+  background: var(--accent2);
+  box-shadow: 0 0 8px rgba(201,123,75,0.4);
+}
+
+/* ── PLAY ── */
+.play-btn {
+  width: 100%;
+  max-width: 540px;
+  padding: 1rem;
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.15s;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.play-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+  z-index: 0;
+}
+.play-btn.active::before { transform: scaleX(1); }
+.play-btn.active { color: var(--bg); }
+.play-btn span { position: relative; z-index: 1; }
+.play-btn:hover:not(.active) { background: rgba(232,184,75,0.07); }
+
+/* ── MIX ── */
+.mix-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1rem 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+}
+
+.vol-row { display: flex; gap: 1.2rem; }
+.vol-group { flex: 1; display: flex; flex-direction: column; gap: 0.45rem; }
+.vol-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+.color-song { color: var(--pulse-song); }
+.color-vib  { color: var(--pulse-vib); }
+.color-pitch { color: var(--accent2); }
+.color-muted { color: var(--muted); }
+
+/* ── WAVEFORM SELECTOR ── */
+.wave-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.wave-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.12s;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.wave-icon {
+  width: 20px;
+  height: 10px;
+  flex-shrink: 0;
+}
+.wave-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.wave-btn.active {
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: rgba(201,123,75,0.1);
+  box-shadow: 0 0 8px rgba(201,123,75,0.15);
+}
+
+/* ── PIANO KEYBOARD ── */
+.piano-wrap {
+  margin-top: 1rem;
+  position: relative;
+}
+
+.piano-keyboard {
+  position: relative;
+  height: 90px;
+  width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.piano-key {
+  position: absolute;
+  border-radius: 0 0 3px 3px;
+  cursor: pointer;
+  transition: background 0.06s;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-size: 0;
+}
+
+.piano-key.white {
+  background: linear-gradient(to bottom, #f0ead8, #ddd6c4);
+  border: 1px solid rgba(0,0,0,0.15);
+  height: 100%;
+  z-index: 1;
+}
+.piano-key.white:hover { background: linear-gradient(to bottom, #f5f0e0, #e8e2d0); }
+.piano-key.white.active {
+  background: var(--accent) !important;
+  box-shadow: 0 0 12px rgba(232,184,75,0.6);
+}
+.piano-key.white .key-label {
+  font-family: var(--font-main);
+  font-size: 0.55rem;
+  color: #888;
+  font-weight: 700;
+}
+.piano-key.white.active .key-label { color: var(--bg); }
+
+.piano-key.black {
+  background: linear-gradient(to bottom, #2a2520, #111);
+  border: 1px solid rgba(255,255,255,0.05);
+  height: 58%;
+  z-index: 2;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.piano-key.black:hover { background: linear-gradient(to bottom, #3a3530, #222); }
+.piano-key.black.active {
+  background: var(--accent2) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(201,123,75,0.6);
+}
+
+/* ── PULSES ── */
+.pulse-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.1rem 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.pulses {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.pulse-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pulse-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pulse-circle.song {
+  border: 2px solid var(--pulse-song);
+  color: var(--pulse-song);
+  background: rgba(232,184,75,0.04);
+}
+.pulse-circle.vib {
+  border: 2px solid var(--pulse-vib);
+  color: var(--pulse-vib);
+  background: rgba(110,198,192,0.04);
+}
+.pulse-circle.beat-song { animation: beatSong 0.15s ease-out; }
+.pulse-circle.beat-vib  { animation: beatVib  0.15s ease-out; }
+
+@keyframes beatSong {
+  0%   { box-shadow: 0 0 0 0 rgba(232,184,75,0.8); background: rgba(232,184,75,0.3); }
+  100% { box-shadow: 0 0 0 20px rgba(232,184,75,0); background: rgba(232,184,75,0.04); }
+}
+@keyframes beatVib {
+  0%   { box-shadow: 0 0 0 0 rgba(110,198,192,0.8); background: rgba(110,198,192,0.3); }
+  100% { box-shadow: 0 0 0 20px rgba(110,198,192,0); background: rgba(110,198,192,0.04); }
+}
+
+.pulse-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.7;
+}
+.pulse-divider { color: var(--border); font-size: 1.8rem; padding-bottom: 1.5rem; }
+
+/* ── HINT ── */
+.hint-card {
+  width: 100%;
+  max-width: 540px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent3);
+  padding: 1rem 1.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.7;
+  border-radius: 1px;
+}
+.hint-card strong { color: var(--text); }
+
+/* ── EXAMPLES ── */
+.examples-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1rem 1.6rem;
+}
+
+.example-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.example-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  transition: border-color 0.12s;
+}
+.example-row:hover { border-color: rgba(110,198,192,0.3); }
+.example-row.active-example {
+  border-color: var(--accent3);
+  background: rgba(110,198,192,0.05);
+}
+
+.example-tempo-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.1s;
+  min-width: 3.2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.example-tempo-btn:hover { border-color: var(--accent); background: rgba(232,184,75,0.08); }
+
+.example-info { flex: 1; min-width: 0; }
+.example-artist {
+  font-size: 0.65rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.example-song {
+  font-size: 0.55rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+
+.example-listen-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-main);
+  font-size: 0.6rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.12s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.example-listen-btn.has-audio { border-color: var(--accent3); color: var(--accent3); }
+.example-listen-btn.has-audio:hover { background: rgba(110,198,192,0.12); }
+.example-listen-btn.is-playing { border-color: var(--accent3); color: var(--bg); background: var(--accent3); }
+.example-listen-btn:not(.has-audio) { opacity: 0.35; cursor: default; }
+
+/* ── FOOTER ── */
+footer {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-align: center;
+  opacity: 0.6;
+}
+
+::-webkit-scrollbar { height: 3px; }
+::-webkit-scrollbar-track { background: var(--border); }
+::-webkit-scrollbar-thumb { background: var(--muted); }
+
+/* ── SEO ABOUT SECTION ── */
+.seo-about {
+  width: 100%;
+  max-width: 540px;
+  margin: 1rem 0 0.5rem;
+  padding: 1.2rem 1.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.seo-about h2 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.seo-about h3 {
+  font-size: 0.82rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  margin: 1rem 0 0.4rem;
+  text-transform: uppercase;
+}
+.seo-about p { margin-bottom: 0.5rem; }
+.seo-about ul { padding-left: 1.2rem; margin-bottom: 0.5rem; }
+.seo-about li { margin-bottom: 0.25rem; }
+.seo-about strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- ── MAIN CARD ── -->
+<div class="rhythm-hero">
+  <div class="rh-top">
+    <div class="rh-subdivision" id="subdivName">Triplet Eighth Notes</div>
+    <div class="rh-zone-badge" id="zoneBadge">Mid Tempo</div>
+  </div>
+
+  <div class="timesig-row">
+    <button class="timesig-btn active" data-beats="4" id="ts44">4/4 · 12/8</button>
+    <button class="timesig-btn" data-beats="3" id="ts34">3/4 · 9/8</button>
+    <button class="timesig-btn" data-beats="2" id="ts24">2/4 · 6/8</button>
+  </div>
+
+  <div class="division-area">
+    <div class="division-row" id="divisionRow"></div>
+    <div class="beat-numbers" id="beatNumbers"></div>
+  </div>
+
+  <div class="tempo-top">
+    <div class="tempo-big" id="tempoDisplay">120</div>
+    <div class="tempo-unit">BPM</div>
+    <button class="tap-btn" id="tapBtn">⏱ Tap</button>
+  </div>
+  <div class="zone-strip-wrap">
+    <div class="notation-row" id="notationRow"></div>
+    <div class="zone-strip" id="zoneStrip">
+      <div class="zone-cursor" id="zoneCursor"></div>
+    </div>
+    <div class="zone-labels" id="zoneLabels"></div>
+  </div>
+</div>
+
+<!-- ── PLAY ── -->
+<button class="play-btn w" id="playBtn"><span id="playLabel">▶ Start</span></button>
+
+<!-- ── MIX ── -->
+<div class="mix-card">
+  <div class="card-label" style="margin-bottom:0.8rem;">Mix</div>
+  <div class="vol-row">
+    <div class="vol-group">
+      <div class="vol-label">
+        <span class="color-song">Beat Click</span>
+        <span class="color-muted" id="volSongVal">100%</span>
+      </div>
+      <input type="range" id="volSong" min="0" max="100" value="100">
+    </div>
+    <div class="vol-group">
+      <div class="vol-label">
+        <span class="color-vib">Vibrato Click</span>
+        <span class="color-muted" id="volVibVal">0%</span>
+      </div>
+      <input type="range" id="volVib" min="0" max="100" value="0" class="vib-range">
+    </div>
+    <div class="vol-group">
+      <div class="vol-label">
+        <span class="color-pitch">Pitch Volume</span>
+        <span class="color-muted" id="volPitchVal">50%</span>
+      </div>
+      <input type="range" id="volPitch" min="0" max="100" value="50" class="pitch-range">
+    </div>
+  </div>
+  <div class="wave-row">
+    <button class="wave-btn active" data-wave="sawtooth"><svg class="wave-icon" viewBox="0 0 24 12"><path d="M0 10 L8 2 V10 L16 2 V10 L24 2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Sawtooth</button>
+    <button class="wave-btn" data-wave="square"><svg class="wave-icon" viewBox="0 0 24 12"><path d="M0 10 H4 V2 H12 V10 H16 V2 H24" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Square</button>
+    <button class="wave-btn" data-wave="triangle"><svg class="wave-icon" viewBox="0 0 24 12"><path d="M0 6 L4 2 L12 10 L20 2 L24 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Triangle</button>
+    <button class="wave-btn" data-wave="sine"><svg class="wave-icon" viewBox="0 0 24 12"><path d="M0 6 C4 0, 8 0, 12 6 S20 12, 24 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Sine</button>
+  </div>
+  <div class="piano-wrap">
+    <div class="piano-keyboard" id="pianoKeyboard"></div>
+  </div>
+</div>
+
+<section class="seo-about" aria-label="About Vibrato Trainer">
+  <h2>What is Vibrato Trainer?</h2>
+  <p>
+    <strong>Vibrato Trainer</strong> is a free, browser-based <strong>vibrato metronome</strong> for musicians.
+    It automatically calculates the correct rhythmic subdivision for vibrato at any tempo — from slow ballads to fast bebop.
+  </p>
+  <h3>How vibrato rhythm works</h3>
+  <p>Vibrato isn't random — it follows the pulse of the music. At different tempos, the oscillation rate that sounds most natural corresponds to different note values:</p>
+  <ul>
+    <li><strong>50–75 BPM (Very Slow / Ballad):</strong> Triplet sixteenth notes — 6 oscillations per beat</li>
+    <li><strong>75–100 BPM (Slow / Soul):</strong> Sixteenth notes — 4 oscillations per beat</li>
+    <li><strong>100–150 BPM (Mid / Swing):</strong> Triplet eighth notes — 3 oscillations per beat</li>
+    <li><strong>150–200 BPM (Medium-Fast):</strong> Eighth notes — 2 oscillations per beat</li>
+    <li><strong>200–300 BPM (Fast / Bebop):</strong> Triplet quarter notes — 3 oscillations per 2 beats</li>
+    <li><strong>300–400 BPM (Double Time):</strong> Quarter notes — 1 oscillation per beat</li>
+  </ul>
+  <h3>Who is it for?</h3>
+  <p>
+    Vibrato Trainer is designed for <strong>singers</strong>, <strong>string players</strong> (violin, viola, cello, guitar),
+    <strong>wind players</strong> (trumpet, saxophone, flute, clarinet), and <strong>jazz musicians</strong> of all kinds.
+    Whether you're learning vibrato for the first time or refining your technique at advanced tempos, this tool
+    helps you lock your vibrato into the rhythmic grid.
+  </p>
+  <h3>Features</h3>
+  <ul>
+    <li>Tempo-synced vibrato click track</li>
+    <li>Tap tempo for any song</li>
+    <li>Visual dot animation showing vibrato rhythm in real time</li>
+    <li>Piano keyboard for pitch selection and vibrato tone playback</li>
+    <li>Adjustable time signatures (2/4, 3/4, 4/4 / 6/8, 9/8, 12/8)</li>
+    <li>Multiple waveforms: sawtooth, square, triangle, sine</li>
+    <li>Installable as a Progressive Web App — works offline</li>
+    <li>Free, no account required</li>
+  </ul>
+</section>
+
+<footer>© 2026 Michael Van Bebber · Vibrato Rhythm Trainer</footer>
+
+<script>
+// ── 6-ZONE TABLE ──
+const ZONES = [
+  {
+    min: 50, max: 75,
+    divisions: 6, ratio: 6,
+    subdivision: 'Triplet Sixteenth Notes',
+    feel: 'Very Slow — Ballad',
+    color: '#8b5cf6',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>triplet 16th notes</strong> — 6 oscillations per beat.`
+  },
+  {
+    min: 75, max: 100,
+    divisions: 4, ratio: 4,
+    subdivision: 'Sixteenth Notes',
+    feel: 'Slow — Ballad / Soul',
+    color: '#3b82f6',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>16th notes</strong> — 4 oscillations per beat.`
+  },
+  {
+    min: 100, max: 150,
+    divisions: 3, ratio: 3,
+    subdivision: 'Triplet Eighth Notes',
+    feel: 'Mid — Swing / Shuffle',
+    color: '#10b981',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>triplet 8th notes</strong> — 3 oscillations per beat.`
+  },
+  {
+    min: 150, max: 200,
+    divisions: 2, ratio: 2,
+    subdivision: 'Eighth Notes',
+    feel: 'Medium-Fast',
+    color: '#e8b84b',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>8th notes</strong> — 2 oscillations per beat.`
+  },
+  {
+    min: 200, max: 300,
+    divisions: 1.5, ratio: 1.5,
+    subdivision: 'Triplet Quarter Notes',
+    feel: 'Fast — Uptempo / Bebop',
+    color: '#c97b4b',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>triplet quarter notes</strong> — 3 oscillations over every 2 beats.`
+  },
+  {
+    min: 300, max: 401,
+    divisions: 1, ratio: 1,
+    subdivision: 'Quarter Notes',
+    feel: 'Very Fast — Double Time',
+    color: '#ef4444',
+    hint: (b, v) => `At <strong>${b} BPM</strong>, vibrato uses <strong>quarter notes</strong> — 1 oscillation per beat.`
+  }
+];
+
+// ── HELPERS ──
+function getZone(bpm) {
+  for (const z of ZONES) if (bpm >= z.min && bpm < z.max) return z;
+  return ZONES[ZONES.length - 1];
+}
+function getVibBpm(bpm) { return Math.round(bpm * getZone(bpm).ratio); }
+
+// ── BUILD ZONE LABELS ──
+const TOTAL_RANGE = 350;
+const zoneLabelsEl = document.getElementById('zoneLabels');
+ZONES.forEach(z => {
+  const pct = ((Math.min(z.max, 400) - z.min) / TOTAL_RANGE) * 100;
+  const div = document.createElement('div');
+  div.className = 'zone-lbl';
+  div.style.width = pct + '%';
+  div.style.color = z.color;
+  div.textContent = z.min;
+  zoneLabelsEl.appendChild(div);
+});
+
+// ── BUILD NOTATION ROW ──
+const notationRow = document.getElementById('notationRow');
+const NOTATION_SVG = [
+  // Zone 1: Triplet 16ths — three beamed with double beam and "3"
+  `<svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="12" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text>
+    <ellipse cx="8" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,8,42)"/>
+    <line x1="13" y1="41" x2="13" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="22" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22,42)"/>
+    <line x1="27" y1="41" x2="27" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="36" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,36,42)"/>
+    <line x1="41" y1="41" x2="41" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="13" y1="18" x2="41" y2="18" stroke="currentColor" stroke-width="2"/>
+    <line x1="13" y1="22" x2="41" y2="22" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  // Zone 2: 16th notes — four beamed with double beam
+  `<svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="4" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,4,42)"/>
+    <line x1="9" y1="41" x2="9" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="15" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,15,42)"/>
+    <line x1="20" y1="41" x2="20" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="26" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,26,42)"/>
+    <line x1="31" y1="41" x2="31" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="37" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,37,42)"/>
+    <line x1="42" y1="41" x2="42" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="9" y1="18" x2="42" y2="18" stroke="currentColor" stroke-width="2"/>
+    <line x1="9" y1="22" x2="42" y2="22" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  // Zone 3: Triplet 8ths — three beamed with single beam and "3"
+  `<svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="12" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text>
+    <ellipse cx="8" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,8,42)"/>
+    <line x1="13" y1="41" x2="13" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="22" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22,42)"/>
+    <line x1="27" y1="41" x2="27" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="36" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,36,42)"/>
+    <line x1="41" y1="41" x2="41" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="13" y1="18" x2="41" y2="18" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  // Zone 4: 8th notes — two beamed with single beam
+  `<svg viewBox="0 0 32 50" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="6" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6,42)"/>
+    <line x1="11" y1="41" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="22" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22,42)"/>
+    <line x1="27" y1="41" x2="27" y2="18" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="11" y1="18" x2="27" y2="18" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  // Zone 5: Triplet quarters — three stems with bracket and "3"
+  `<svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="12" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text>
+    <line x1="8" y1="16" x2="40" y2="16" stroke="currentColor" stroke-width="1"/>
+    <line x1="8" y1="16" x2="8" y2="19" stroke="currentColor" stroke-width="1"/>
+    <line x1="40" y1="16" x2="40" y2="19" stroke="currentColor" stroke-width="1"/>
+    <ellipse cx="6" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6,42)"/>
+    <line x1="11" y1="41" x2="11" y2="20" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="22" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22,42)"/>
+    <line x1="27" y1="41" x2="27" y2="20" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="38" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,38,42)"/>
+    <line x1="43" y1="41" x2="43" y2="20" stroke="currentColor" stroke-width="1.5"/>
+  </svg>`,
+  // Zone 6: Quarter note — single stem
+  `<svg viewBox="0 0 16 50" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="6" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6,42)"/>
+    <line x1="11" y1="41" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+  </svg>`
+];
+
+ZONES.forEach((z, i) => {
+  const pct = ((Math.min(z.max, 400) - z.min) / TOTAL_RANGE) * 100;
+  const div = document.createElement('div');
+  div.className = 'notation-zone';
+  div.style.width = pct + '%';
+  div.style.color = z.color;
+  div.innerHTML = NOTATION_SVG[i];
+  notationRow.appendChild(div);
+});
+
+// ── STATE ──
+let tempo = 120;
+let timeSignature = 4;
+let isPlaying = false;
+let audioCtx = null;
+let schedulerInterval = null;
+let nextSongTime = 0;
+let nextVibTime = 0;
+let songBeatNum = 0;
+let vibBeatNum = 0;
+let tapTimes = [];
+let currentDotIndex = 0;
+let totalDisplayDots = 0;
+let lastLitDot = null;
+
+const playBtn     = document.getElementById('playBtn');
+const playLabel   = document.getElementById('playLabel');
+const volSong     = document.getElementById('volSong');
+const volVib      = document.getElementById('volVib');
+const volPitch    = document.getElementById('volPitch');
+const zoneStripEl = document.getElementById('zoneStrip');
+
+// Pitch tone nodes (persistent while playing)
+let pitchOsc = null;
+let pitchLfo = null;
+let pitchGain = null;
+let pitchLfoGain = null;
+let currentPitch = 440; // A4 default
+let currentWaveform = 'sawtooth';
+let activePianoKey = null;
+
+// ── ZONE STRIP DRAG (replaces old slider) ──
+function tempoFromPointer(e) {
+  const rect = zoneStripEl.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+  return Math.round(50 + pct * 350);
+}
+
+function onStripDrag(e) {
+  e.preventDefault();
+  tempo = tempoFromPointer(e);
+  updateUI();
+  updatePitchTone();
+  if (isPlaying) restartAudio();
+}
+
+function onStripUp() {
+  document.removeEventListener('mousemove', onStripDrag);
+  document.removeEventListener('mouseup', onStripUp);
+  document.removeEventListener('touchmove', onStripDrag);
+  document.removeEventListener('touchend', onStripUp);
+}
+
+zoneStripEl.addEventListener('mousedown', (e) => {
+  onStripDrag(e);
+  document.addEventListener('mousemove', onStripDrag);
+  document.addEventListener('mouseup', onStripUp);
+});
+zoneStripEl.addEventListener('touchstart', (e) => {
+  onStripDrag(e);
+  document.addEventListener('touchmove', onStripDrag, { passive: false });
+  document.addEventListener('touchend', onStripUp);
+}, { passive: false });
+
+// ── BUILD DIVISION DOTS ──
+function buildDivisionDots(divisions) {
+  const rowEl = document.getElementById('divisionRow');
+  const numEl = document.getElementById('beatNumbers');
+  rowEl.innerHTML = '';
+  numEl.innerHTML = '';
+
+  const displayBeats = timeSignature;
+  const isTriQ = (divisions === 1.5);
+
+  if (isTriQ) {
+    const groups = Math.max(1, Math.floor(displayBeats / 2));
+    totalDisplayDots = groups * 3;
+    for (let g = 0; g < groups; g++) {
+      if (g > 0) { const s = document.createElement('div'); s.className = 'beat-sep'; rowEl.appendChild(s); }
+      const grp = document.createElement('div');
+      grp.className = 'beat-group';
+      const und = document.createElement('div'); und.className = 'beat-underline'; grp.appendChild(und);
+      for (let d = 0; d < 3; d++) {
+        const slot = document.createElement('div'); slot.className = 'dot-slot';
+        const dot  = document.createElement('div');
+        dot.className = 'div-dot' + (g === 0 && d === 0 ? ' beat-one' : '');
+        dot.id = `dot-${g * 3 + d}`;
+        slot.appendChild(dot); grp.appendChild(slot);
+      }
+      rowEl.appendChild(grp);
+      const ng = document.createElement('div'); ng.className = 'beat-num-grp';
+      ng.textContent = `${g*2+1}–${g*2+2}`; numEl.appendChild(ng);
+    }
+  } else {
+    const dpb = Math.round(divisions);
+    totalDisplayDots = dpb * displayBeats;
+    for (let b = 0; b < displayBeats; b++) {
+      if (b > 0) { const s = document.createElement('div'); s.className = 'beat-sep'; rowEl.appendChild(s); }
+      const grp = document.createElement('div');
+      grp.className = 'beat-group';
+      const und = document.createElement('div'); und.className = 'beat-underline'; grp.appendChild(und);
+      for (let d = 0; d < dpb; d++) {
+        const slot = document.createElement('div'); slot.className = 'dot-slot';
+        const dot  = document.createElement('div');
+        dot.className = 'div-dot' + (b === 0 && d === 0 ? ' beat-one' : '');
+        dot.id = `dot-${b * dpb + d}`;
+        slot.appendChild(dot); grp.appendChild(slot);
+      }
+      rowEl.appendChild(grp);
+      const ng = document.createElement('div'); ng.className = 'beat-num-grp';
+      ng.textContent = b + 1; numEl.appendChild(ng);
+    }
+  }
+}
+
+// ── UPDATE UI ──
+function updateUI() {
+  const z      = getZone(tempo);
+  const vibBpm = getVibBpm(tempo);
+
+  document.getElementById('tempoDisplay').textContent  = tempo;
+  document.getElementById('subdivName').textContent    = z.subdivision;
+  document.getElementById('zoneBadge').textContent     = z.feel;
+  document.getElementById('zoneBadge').style.color     = z.color;
+  document.getElementById('zoneBadge').style.borderColor = z.color;
+
+  const pct = ((tempo - 50) / 350) * 100;
+  document.getElementById('zoneCursor').style.left = Math.max(0, Math.min(100, pct)) + '%';
+
+  buildDivisionDots(z.divisions);
+  currentDotIndex = 0;
+  lastLitDot = null;
+}
+
+// ── EVENTS ──
+
+volSong.addEventListener('input', () => { document.getElementById('volSongVal').textContent = volSong.value + '%'; });
+volVib.addEventListener('input',  () => { document.getElementById('volVibVal').textContent  = volVib.value  + '%'; });
+volPitch.addEventListener('input', () => {
+  document.getElementById('volPitchVal').textContent = volPitch.value + '%';
+  if (pitchGain) {
+    pitchGain.gain.value = volPitch.value / 100 * 0.075;
+  }
+});
+
+// Tap tempo
+let tapTimerId = null;
+document.getElementById('tapBtn').addEventListener('click', () => {
+  const now = Date.now();
+  tapTimes.push(now);
+  if (tapTimes.length > 8) tapTimes.shift();
+  clearTimeout(tapTimerId);
+  tapTimerId = setTimeout(() => { tapTimes = []; }, 2500);
+  if (tapTimes.length >= 2) {
+    const intervals = [];
+    for (let i = 1; i < tapTimes.length; i++) intervals.push(tapTimes[i] - tapTimes[i-1]);
+    const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+    tempo = Math.round(Math.min(400, Math.max(50, 60000 / avg)));
+    updateUI();
+    if (isPlaying) restartAudio();
+  }
+});
+
+// Time signature
+document.querySelectorAll('.timesig-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.timesig-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    timeSignature = parseInt(btn.dataset.beats);
+    songBeatNum = 0;
+    updateUI();
+    if (isPlaying) restartAudio();
+  });
+});
+
+// ── AUDIO ──
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// ── iOS AUDIO UNLOCK ──
+// Pre-unlock AudioContext on first user interaction
+function unlockAudio() {
+  const ctx = getCtx();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+    // Create and immediately stop a silent buffer to fully unlock on iOS
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+  }
+  document.removeEventListener('touchstart', unlockAudio);
+  document.removeEventListener('touchend', unlockAudio);
+  document.removeEventListener('click', unlockAudio);
+}
+document.addEventListener('touchstart', unlockAudio, { once: true });
+document.addEventListener('touchend', unlockAudio, { once: true });
+document.addEventListener('click', unlockAudio, { once: true });
+
+function makeClick(time, freq, vol, dur) {
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.frequency.value = freq;
+  osc.type = 'sine';
+  env.gain.setValueAtTime(0, time);
+  env.gain.linearRampToValueAtTime(vol, time + 0.002);
+  env.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(time);
+  osc.stop(time + dur + 0.01);
+}
+
+const AHEAD = 0.1;
+
+function scheduler() {
+  const ctx        = getCtx();
+  const vibBpm     = getVibBpm(tempo);
+  const songInt    = 60 / tempo;
+  const vibInt     = 60 / vibBpm;
+  const sVol       = volSong.value / 100 * 0.7;
+  const vVol       = volVib.value  / 100 * 0.35;
+
+  while (nextSongTime < ctx.currentTime + AHEAD) {
+    const accent = songBeatNum % timeSignature === 0;
+    makeClick(nextSongTime, accent ? 1200 : 900, sVol * (accent ? 1 : 0.65), 0.035);
+    nextSongTime += songInt;
+    songBeatNum++;
+  }
+
+  while (nextVibTime < ctx.currentTime + AHEAD) {
+    makeClick(nextVibTime, 420, vVol, 0.016);
+    const t = nextVibTime;
+    const idx = currentDotIndex % totalDisplayDots;
+    setTimeout(() => {
+      if (lastLitDot) { lastLitDot.classList.remove('lit'); lastLitDot = null; }
+      const dotEl = document.getElementById(`dot-${idx}`);
+      if (dotEl) { dotEl.classList.add('lit'); lastLitDot = dotEl; }
+    }, Math.max(0, (t - ctx.currentTime) * 1000));
+    nextVibTime += vibInt;
+    currentDotIndex = (currentDotIndex + 1) % totalDisplayDots;
+    vibBeatNum++;
+  }
+}
+
+async function startPitchTone() {
+  const ctx = getCtx();
+  if (ctx.state === 'suspended') await ctx.resume();
+  stopPitchTone();
+
+  const vibBpm = getVibBpm(tempo);
+  const lfoFreq = vibBpm / 60;
+
+  pitchOsc = ctx.createOscillator();
+  pitchOsc.type = currentWaveform;
+  pitchOsc.frequency.value = currentPitch;
+
+  pitchLfo = ctx.createOscillator();
+  pitchLfo.type = 'sine';
+  pitchLfo.frequency.value = lfoFreq;
+
+  pitchLfoGain = ctx.createGain();
+  // Gentle scaling: sqrt relationship gives ~5.5 Hz at C3, ~8 Hz at A4, ~12 Hz at C6
+  pitchLfoGain.gain.value = 8 * Math.sqrt(currentPitch / 440);
+
+  pitchGain = ctx.createGain();
+  pitchGain.gain.value = volPitch.value / 100 * 0.075;
+
+  pitchLfo.connect(pitchLfoGain);
+  pitchLfoGain.connect(pitchOsc.frequency);
+  pitchOsc.connect(pitchGain);
+  pitchGain.connect(ctx.destination);
+
+  pitchLfo.start();
+  pitchOsc.start();
+}
+
+function stopPitchTone() {
+  if (pitchOsc) { pitchOsc.stop(); pitchOsc = null; }
+  if (pitchLfo) { pitchLfo.stop(); pitchLfo = null; }
+  pitchGain = null;
+  pitchLfoGain = null;
+}
+
+function updatePitchTone() {
+  if (pitchLfo) {
+    const vibBpm = getVibBpm(tempo);
+    pitchLfo.frequency.value = vibBpm / 60;
+  }
+  if (pitchOsc) {
+    pitchOsc.frequency.value = currentPitch;
+  }
+  if (pitchLfoGain) {
+    pitchLfoGain.gain.value = 8 * Math.sqrt(currentPitch / 440);
+  }
+}
+
+async function startAudio() {
+  const ctx = getCtx();
+  if (ctx.state === 'suspended') await ctx.resume();
+  nextSongTime = ctx.currentTime + 0.05;
+  nextVibTime  = ctx.currentTime + 0.05;
+  songBeatNum = vibBeatNum = currentDotIndex = 0;
+  lastLitDot = null;
+  schedulerInterval = setInterval(scheduler, 25);
+
+  // Start pitch tone with metronome
+  startPitchTone();
+}
+
+function stopAudio() {
+  clearInterval(schedulerInterval);
+  schedulerInterval = null;
+  document.querySelectorAll('.div-dot.lit').forEach(d => d.classList.remove('lit'));
+  lastLitDot = null;
+  stopPitchTone();
+}
+
+function restartAudio() { stopAudio(); startAudio(); }
+
+playBtn.addEventListener('click', async () => {
+  isPlaying = !isPlaying;
+  if (isPlaying) {
+    const ctx = getCtx();
+    if (ctx.state === 'suspended') await ctx.resume();
+    playBtn.classList.add('active');
+    playLabel.textContent = '■ Stop';
+    startAudio();
+  } else {
+    playBtn.classList.remove('active');
+    playLabel.textContent = '▶ Start';
+    stopAudio();
+  }
+});
+
+// ── PWA SERVICE WORKER ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    // Force clear all old caches
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+    // Unregister any existing service workers
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map(r => r.unregister()));
+    // Re-register fresh
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
+// ── WAVEFORM SELECTOR ──
+document.querySelectorAll('.wave-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentWaveform = btn.dataset.wave;
+    if (pitchOsc) {
+      pitchOsc.type = currentWaveform;
+    }
+  });
+});
+
+// ── PIANO KEYBOARD ──
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function midiToFreq(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+
+function buildPiano() {
+  const kbd = document.getElementById('pianoKeyboard');
+  kbd.innerHTML = '';
+
+  // C3 (MIDI 48) to C6 (MIDI 84) inclusive
+  const startMidi = 48;
+  const endMidi = 84;
+
+  // Count white keys
+  const whiteIndices = [];
+  for (let m = startMidi; m <= endMidi; m++) {
+    const note = NOTE_NAMES[m % 12];
+    if (!note.includes('#')) whiteIndices.push(m);
+  }
+  const totalWhite = whiteIndices.length; // 22 white keys
+
+  const whiteWidthPct = 100 / totalWhite;
+  const blackWidthPct = whiteWidthPct * 0.58; // black keys ~58% width of white
+
+  // Draw white keys first
+  let wIdx = 0;
+  for (let m = startMidi; m <= endMidi; m++) {
+    const note = NOTE_NAMES[m % 12];
+    if (note.includes('#')) continue;
+    const octave = Math.floor(m / 12) - 1;
+    const freq = midiToFreq(m);
+
+    const key = document.createElement('div');
+    key.className = 'piano-key white';
+    key.dataset.midi = m;
+    key.dataset.freq = freq;
+    key.style.left = (wIdx * whiteWidthPct) + '%';
+    key.style.width = whiteWidthPct + '%';
+
+    if (note === 'C') {
+      const lbl = document.createElement('span');
+      lbl.className = 'key-label';
+      lbl.textContent = 'C' + octave;
+      key.appendChild(lbl);
+    }
+    if (m === 69) { key.classList.add('active'); activePianoKey = key; }
+    kbd.appendChild(key);
+    wIdx++;
+  }
+
+  // Draw black keys on top, positioned between their neighboring white keys
+  wIdx = 0;
+  for (let m = startMidi; m <= endMidi; m++) {
+    const note = NOTE_NAMES[m % 12];
+    if (note.includes('#')) {
+      const freq = midiToFreq(m);
+      const key = document.createElement('div');
+      key.className = 'piano-key black';
+      key.dataset.midi = m;
+      key.dataset.freq = freq;
+      // Center the black key on the boundary between the white key before and after
+      const leftEdge = wIdx * whiteWidthPct - blackWidthPct / 2;
+      key.style.left = leftEdge + '%';
+      key.style.width = blackWidthPct + '%';
+      if (m === 69) { key.classList.add('active'); activePianoKey = key; }
+      kbd.appendChild(key);
+    } else {
+      wIdx++;
+    }
+  }
+
+  // Click/touch handlers
+  kbd.addEventListener('mousedown', handlePianoClick);
+  kbd.addEventListener('touchstart', handlePianoClick, { passive: false });
+}
+
+function handlePianoClick(e) {
+  e.preventDefault();
+  const target = e.target.closest('.piano-key');
+  if (!target) return;
+
+  const freq = parseFloat(target.dataset.freq);
+  currentPitch = freq;
+
+  // Update active key highlight
+  if (activePianoKey) activePianoKey.classList.remove('active');
+  target.classList.add('active');
+  activePianoKey = target;
+
+  // Update pitch and vibrato depth live if tone is running
+  if (pitchOsc) {
+    updatePitchTone();
+  }
+}
+
+buildPiano();
+
+// ── INIT ──
+updateUI();
+</script>
+</body>
+</html>
