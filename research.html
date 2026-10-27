@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Research — Vibrato as Rhythmic Subdivision | Vibrato Trainer</title>
+<meta name="description" content="The research behind Vibrato Trainer: 100 commercial recordings coded for vibrato subdivision, Bayesian crossover estimates, and the full dataset available for download.">
+<meta name="author" content="Michael Van Bebber">
+<link rel="canonical" href="https://vibratotrainer.com/research.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vibratotrainer.com/research.html">
+<meta property="og:title" content="Research — Vibrato as Rhythmic Subdivision">
+<meta property="og:description" content="100 commercial recordings coded for vibrato subdivision. Full dataset and conference poster available for download.">
+<meta property="og:site_name" content="Vibrato Trainer">
+<meta property="og:locale" content="en_US">
+
+<meta name="theme-color" content="#e8b84b">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "Vibrato as Rhythmic Subdivision: Cross-Genre Evidence for Vibrato\u2013Tempo Coupling in 100 Commercial Recordings",
+  "author": { "@type": "Person", "name": "Michael Van Bebber" },
+  "datePublished": "2026-09",
+  "url": "https://vibratotrainer.com/research.html",
+  "publisher": { "@type": "Organization", "name": "Vibrato Trainer" }
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0e0c0a;
+    --surface: #181410;
+    --border: #2e2820;
+    --accent: #e8b84b;
+    --text: #f0ead8;
+    --muted: #7a6e5e;
+    --z1: #8b5cf6; --z2: #3b82f6; --z3: #10b981;
+    --z4: #e8b84b; --z5: #c97b4b; --z6: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Optima', 'Candara', 'Segoe UI', sans-serif;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    line-height: 1.7;
+  }
+  h1 { color: var(--accent); font-size: 2rem; margin-bottom: .3rem; letter-spacing: -.02em; }
+  .subtitle {
+    color: var(--muted); font-size: .75rem; letter-spacing: .15em;
+    text-transform: uppercase; margin-bottom: 2.5rem;
+  }
+  h2 {
+    color: var(--accent); font-size: 1rem; letter-spacing: .12em;
+    text-transform: uppercase; margin: 2.5rem 0 .7rem;
+  }
+  p { margin-bottom: 1rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .lede { font-size: 1.08rem; }
+  .callout {
+    background: var(--surface); border-left: 3px solid var(--accent);
+    padding: 1.1rem 1.3rem; margin: 1.6rem 0; border-radius: 3px;
+  }
+  .callout strong { color: var(--accent); }
+
+  .appcard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px; padding: 1.3rem 1.4rem; margin: 0 0 2.2rem;
+  }
+  .appcard h3 { color: var(--accent); font-size: 1.05rem; margin-bottom: .4rem; font-weight: 600; }
+  .appcard p { margin-bottom: .9rem; }
+  .appcard .go {
+    display: inline-block; border: 1px solid var(--accent); color: var(--accent);
+    padding: .5rem 1.3rem; border-radius: 3px; letter-spacing: .1em;
+    font-size: .8rem; text-transform: uppercase;
+  }
+  .appcard .go:hover { background: var(--accent); color: var(--bg); text-decoration: none; }
+
+  .pagehead {
+    display: flex; flex-wrap: wrap; align-items: flex-end;
+    justify-content: space-between; gap: .6rem 1.5rem; margin-bottom: 2.2rem;
+  }
+  .pagehead h1 { margin-bottom: .3rem; }
+  .pagehead .subtitle { margin-bottom: 0; }
+  .head-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .head-links a {
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: .35rem .8rem; font-size: .8rem; white-space: nowrap;
+  }
+  .head-links a:hover { border-color: var(--accent); text-decoration: none; }
+  @media (max-width: 480px) {
+    .pagehead { margin-bottom: 1.8rem; }
+    .head-links a { font-size: .76rem; padding: .3rem .7rem; }
+  }
+  .strip-glyphs { position: relative; height: 46px; margin-bottom: .45rem; }
+  .strip-glyphs span {
+    position: absolute; bottom: 0; transform: translateX(-50%);
+    display: block; width: 40px; height: 42px;
+  }
+  .strip-glyphs svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  @media (max-width: 480px) {
+    .strip-glyphs { height: 38px; }
+    .strip-glyphs span { width: 30px; height: 34px; }
+  }
+  .strip { margin: 1.8rem 0 2.2rem; }
+  .strip-bar { display: flex; height: 22px; border-radius: 3px; overflow: hidden; }
+  .strip-bar span { display: block; }
+  .strip-labels {
+    position: relative; height: 1.3rem; margin-top: .4rem;
+    font-size: .8rem; font-variant-numeric: tabular-nums;
+  }
+  .strip-labels b { position: absolute; font-weight: 600; transform: translateX(-50%); }
+  .strip-labels b:first-child { transform: none; }
+
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 .6rem; font-size: .93rem; }
+  th, td { padding: .5rem .6rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--accent); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+  th.num, td.num { text-align: right; }
+  td.num { font-variant-numeric: tabular-nums; }
+  caption { caption-side: bottom; color: var(--muted); font-size: .8rem; padding-top: .7rem; text-align: left; }
+
+  .dl { display: block; background: var(--surface); border: 1px solid var(--border);
+        border-radius: 4px; padding: 1rem 1.2rem; margin-bottom: .8rem; }
+  .dl:hover { border-color: var(--accent); text-decoration: none; }
+  .dl b { display: block; color: var(--accent); margin-bottom: .15rem; }
+  .dl span { display: block; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+
+  ul { margin: 0 0 1rem 1.1rem; }
+  li { margin-bottom: .4rem; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+  .cite { font-size: .88rem; color: var(--muted); background: var(--surface);
+          padding: .9rem 1.1rem; border-radius: 3px; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .75rem; letter-spacing: .1em; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="pagehead">
+  <div>
+    <h1>Research</h1>
+    <p class="subtitle">Vibrato as Rhythmic Subdivision</p>
+  </div>
+  <div class="head-links">
+    <a href="VanBebber_ICCCM2026_Poster.pdf">Poster (PDF)</a>
+    <a href="vibrato-rhythm-dataset.csv" download>Dataset (CSV)</a>
+  </div>
+</div>
+
+<div class="appcard">
+  <h3>Vibrato Trainer</h3>
+  <p>
+    A free metronome that plays the beat and the vibrato subdivision together, so you can hear
+    the relationship this research describes. Runs in any browser, works offline, and is also
+    available as an iOS app. The page below explains where its tempo zones come from.
+  </p>
+  <a class="go" href="/">Open Vibrato Trainer &rarr;</a>
+</div>
+
+<p class="lede">
+  Vibrato rate is usually described as a stable trait of the performer &mdash; roughly 5&ndash;8&nbsp;Hz,
+  independent of what the music is doing. This project asks a different question: not
+  <em>whether</em> rate is relatively stable, but <em>what holds it there</em>.
+</p>
+
+<div class="callout">
+  <strong>The finding.</strong> Vibrato rate is not fixed. Its apparent stability emerges from
+  switching rhythmic subdivisions. As tempo rises, performers step down through coarser
+  subdivisions &mdash; and the switches fall at predictable tempos.
+</div>
+
+<h2>Where the app's zones come from</h2>
+<p>
+  Vibrato Trainer picks a subdivision for any tempo you give it. Those boundaries are not
+  guesses. They are posterior estimates from a Bayesian model fitted to 100 commercial
+  recordings.
+</p>
+
+<div class="strip">
+  <div class="strip-glyphs">
+    <span style="left:5.5%;color:var(--z1)"><svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg"> <text x="27" y="15" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text> <ellipse cx="8.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,8.92,42)"/> <line x1="13" y1="41" x2="13" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="22.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22.92,42)"/> <line x1="27" y1="41" x2="27" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="36.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,36.92,42)"/> <line x1="41" y1="41" x2="41" y2="20" stroke="currentColor" stroke-width="1.5"/> <line x1="13" y1="21" x2="41" y2="21" stroke="currentColor" stroke-width="2"/> <line x1="13" y1="25" x2="41" y2="25" stroke="currentColor" stroke-width="2"/> </svg></span>
+    <span style="left:22.2%;color:var(--z2)"><svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg"> <ellipse cx="4.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,4.92,42)"/> <line x1="9" y1="41" x2="9" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="15.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,15.92,42)"/> <line x1="20" y1="41" x2="20" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="26.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,26.92,42)"/> <line x1="31" y1="41" x2="31" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="37.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,37.92,42)"/> <line x1="42" y1="41" x2="42" y2="20" stroke="currentColor" stroke-width="1.5"/> <line x1="9" y1="21" x2="42" y2="21" stroke="currentColor" stroke-width="2"/> <line x1="9" y1="25" x2="42" y2="25" stroke="currentColor" stroke-width="2"/> </svg></span>
+    <span style="left:43.0%;color:var(--z3)"><svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg"> <text x="27" y="15" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text> <ellipse cx="8.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,8.92,42)"/> <line x1="13" y1="41" x2="13" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="22.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22.92,42)"/> <line x1="27" y1="41" x2="27" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="36.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,36.92,42)"/> <line x1="41" y1="41" x2="41" y2="20" stroke="currentColor" stroke-width="1.5"/> <line x1="13" y1="21" x2="41" y2="21" stroke="currentColor" stroke-width="2"/> </svg></span>
+    <span style="left:62.8%;color:var(--z4)"><svg viewBox="0 0 32 50" xmlns="http://www.w3.org/2000/svg"> <ellipse cx="6.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6.92,42)"/> <line x1="11" y1="41" x2="11" y2="20" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="22.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22.92,42)"/> <line x1="27" y1="41" x2="27" y2="20" stroke="currentColor" stroke-width="1.5"/> <line x1="11" y1="21" x2="27" y2="21" stroke="currentColor" stroke-width="2"/> </svg></span>
+    <span style="left:79.5%;color:var(--z5)"><svg viewBox="0 0 48 50" xmlns="http://www.w3.org/2000/svg"> <line x1="8" y1="13.5" x2="21" y2="13.5" stroke="currentColor" stroke-width="1.4"/> <line x1="33" y1="13.5" x2="46" y2="13.5" stroke="currentColor" stroke-width="1.4"/> <line x1="8" y1="13.5" x2="8" y2="18" stroke="currentColor" stroke-width="1.4"/> <line x1="46" y1="13.5" x2="46" y2="18" stroke="currentColor" stroke-width="1.4"/> <text x="27" y="18.62" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor" font-family="serif">3</text> <ellipse cx="6.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6.92,42)"/> <line x1="11" y1="41" x2="11" y2="21.5" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="22.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,22.92,42)"/> <line x1="27" y1="41" x2="27" y2="21.5" stroke="currentColor" stroke-width="1.5"/> <ellipse cx="38.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,38.92,42)"/> <line x1="43" y1="41" x2="43" y2="21.5" stroke="currentColor" stroke-width="1.5"/> </svg></span>
+    <span style="left:93.1%;color:var(--z6)"><svg viewBox="0 0 16 50" xmlns="http://www.w3.org/2000/svg"> <ellipse cx="6.92" cy="42" rx="5" ry="3.5" fill="currentColor" transform="rotate(-15,6.92,42)"/> <line x1="11" y1="41" x2="11" y2="20" stroke="currentColor" stroke-width="1.5"/> </svg></span>
+  </div>
+  <div class="strip-bar">
+    <span style="background:var(--z1);width:11.1%"></span><span style="background:var(--z2);width:22.2%"></span><span style="background:var(--z3);width:19.5%"></span><span style="background:var(--z4);width:20.1%"></span><span style="background:var(--z5);width:13.2%"></span><span style="background:var(--z6);width:13.9%"></span>
+  </div>
+  <div class="strip-labels">
+    <b style="left:0;color:var(--z1)">50</b>
+    <b style="left:11.1%;color:var(--z2)">63</b>
+    <b style="left:33.3%;color:var(--z3)">100</b>
+    <b style="left:52.8%;color:var(--z4)">150</b>
+    <b style="left:72.9%;color:var(--z5)">227</b>
+    <b style="left:86.1%;color:var(--z6)">300</b>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Crossover</th><th class="num">Estimate</th><th class="num">95% interval</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Triplet 16ths &rarr; 16ths</td><td class="num">63</td><td class="num">58&ndash;69</td></tr>
+    <tr><td>16ths &rarr; Triplet 8ths</td><td class="num">99</td><td class="num">91&ndash;108</td></tr>
+    <tr><td>Triplet 8ths &rarr; 8ths</td><td class="num">148</td><td class="num">135&ndash;162</td></tr>
+    <tr><td>8ths &rarr; Triplet quarters</td><td class="num">227</td><td class="num">210&ndash;246</td></tr>
+    <tr><td>Triplet quarters &rarr; Quarters</td><td class="num">310</td><td class="num">284&ndash;343</td></tr>
+  </tbody>
+  <caption>Tempos in BPM.</caption>
+</table>
+
+<h2>How the recordings were coded</h2>
+<p>
+  Each recording was timed against a metronome and its vibrato assigned to the subdivision it
+  tracks. Implied rate is then tempo &times; multiplier &divide; 60. Across all six categories,
+  every category mean falls between 5.5 and 6.7&nbsp;Hz &mdash; the rate stays put while the
+  subdivision underneath it changes five times across a sevenfold tempo range.
+</p>
+<p>
+  The corpus spans 15 genres and 10 instruments, 61 vocal and 43 instrumental observations.
+  Four recordings use two different subdivisions in different sections at one unchanging tempo;
+  three of those four sit within 16 BPM of an estimated crossover.
+</p>
+
+<h2>Check it yourself</h2>
+<p>
+  Every recording is commercially released and publicly available, and the dataset carries a
+  timestamp for each one. Any coding decision here can be checked against the source in about a
+  minute. That is deliberate: this is a single-rater corpus, and the answer to that limitation is
+  to make the evidence easy to audit.
+</p>
+
+<a class="dl" href="vibrato-rhythm-dataset.csv" download>
+  <b>Dataset &mdash; 100 recordings (CSV)</b>
+  <span>Song, artist, tempo, coded subdivision, instrument, genre, timestamp and recording link.</span>
+</a>
+
+<a class="dl" href="VanBebber_ICCCM2026_Poster.pdf">
+  <b>Conference poster (PDF, A0)</b>
+  <span>Presented at ICCCM 2026, 4th International Conference on Computational and Cognitive
+  Musicology, W&uuml;rzburg, Germany. Full method, figures and limitations.</span>
+</a>
+
+<h2>What is still open</h2>
+<ul>
+  <li>Four observations remain above 8&nbsp;Hz and are reported rather than adjusted.</li>
+  <li>Coding is by a single rater; an inter-rater check on a 50-recording subset is in progress.</li>
+  <li>Spectral rate extraction would turn the aural judgments into measurement.</li>
+  <li>The corpus is expanding toward roughly 220 observations for journal submission.</li>
+</ul>
+
+<hr>
+
+<h2>Citation</h2>
+<p class="cite">
+  Van Bebber, M. (2026). <em>Vibrato as rhythmic subdivision: cross-genre evidence for
+  vibrato&ndash;tempo coupling in 100 commercial recordings.</em> Poster presented at the 4th
+  International Conference on Computational and Cognitive Musicology, W&uuml;rzburg, Germany.
+</p>
+
+<h2>Contact</h2>
+<p>
+  Questions, corrections, or a recording you think breaks the pattern &mdash;
+  I would like to hear about it: <a href="mailto:mvanbebber@gmail.com">mvanbebber@gmail.com</a>
+</p>
+
+<footer>
+  &copy; 2026 Michael Van Bebber &middot;
+  <a href="/">Vibrato Trainer</a> &middot;
+  <a href="privacy.html">Privacy</a>
+</footer>
+
+</body>
+</html>
